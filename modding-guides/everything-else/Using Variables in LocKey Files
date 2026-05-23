@@ -1,0 +1,27 @@
+LocKey files support the use of certain variables (i.e. {float_#} and {stat_#}), and this can be seen in many descriptions in the games files. The LocKey file also has the ability to set colors, text style, and text size using Rich Values.
+
+The Gorilla Arms Cyberware uses a couple of these to change text color and display stats:
+<Rich color="TooltipText.cyberwareDescriptionHighlightColor" style="Semi-Bold">Gorilla Arms</> are lightweight, efficient and hard-hitting arm replacement cyberware.\n\n+{stat_0} to <Rich color="TooltipText.cyberwareDescriptionHighlightColor" style="Semi-Bold">Body</> Attribute checks.
+
+Defining Floats and Stats:
+    localizedDescription: #YOUR LOCKEY FILE
+    floatValues: #these are defined values, usually used to show effects
+      - 1
+      - 2
+      - 3
+    stats: #these are the variables used by the game, usually to show the result of effects
+      - BaseStats.AttunementHelper #{stat_0} 
+      - BaseStats.AttunementHelper2 #{stat_1}
+      - BaseStats.AttunementHelper3 #{stat_2}
+
+You can also use hex format colors instead of the predefined table of colors in certain locations by using: <Rich color="HEX-CODE-HERE"> YOUR TEXT HERE </>
+
+You can combine a couple of these effects, and in certain text locations, change the color of text dynamically based on a stat value. This is done by defining a stat variable (i.e, {stat_0}), then using that stat variable in the hex code for the color.
+The end result should look something like this: <Rich size="26" Rich color="{stat_0}9999" style="Semi-Bold"> YOUR TEXT HERE</> 
+
+This allows a stat to replace the first few digits of the hex code, and display a different color than originally shown. From my testing these variables are a little more strict in how they are put in, and have only had succeess when defining any changes to the variable at the item level via stat modifiers (either constant or combined).
+There are also a few irregularities when defining and using this system. In this example the first 2 digits from the hex are absent and being replaced with the given stat: #_ _9999
+-2 Digit variables here work as expected
+-3 Digit variables here push out the final 9 from the hex code, and use the whole 3 digit variable at the start.
+-4 Digits and beyond only use the last 2 digits.
+-Decimals also work, and I believe they always use the last 2 digits in the variable but this needs more testing. Seems like they work up to 3 decimal places, and it selects the last 2 in this instance.
